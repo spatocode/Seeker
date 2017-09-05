@@ -1,3 +1,4 @@
+from application.cmd import *
 import os
 import time
 import socket
@@ -78,3 +79,6 @@ class Sniffer():
             # turn off promiscuos mode on windows
             if os.name == "nt":
                 sniffer.ioctl(socket.SIO_RCVALL, socket.RCVALL_OFF)
+
+if __name__ == "__main__":
+    app.run()
