@@ -1,4 +1,3 @@
-from application.cmd import *
 import os
 import time
 import socket
@@ -37,8 +36,6 @@ class IP(Structure):
 
 class Sniffer():
     def __init__(self, *args, **kwargs):
-
-    def run(self):
         print("Sniffing started")
         host = "127.0.0.1"
         #socket.gethostbyname(socket.gethostname())
@@ -81,4 +78,4 @@ class Sniffer():
                 sniffer.ioctl(socket.SIO_RCVALL, socket.RCVALL_OFF)
 
 if __name__ == "__main__":
-    app.run()
+    Sniffer()
