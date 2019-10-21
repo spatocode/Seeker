@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import wx
+import wx.adv
+from wx.lib.wordwrap import wordwrap
 from utils.common import scale_image
+from setup import *
 
 class Seeker(wx.Frame):
     def __init__(self, *args, **kwargs):
@@ -127,6 +130,34 @@ class Seeker(wx.Frame):
         menuBar.Append(helpMenu, "&Help")
 
         self.SetMenuBar(menuBar)
+        self.Bind(wx.EVT_MENU, self.OnToggleToolbar, self.showToolbarItem)
+        self.Bind(wx.EVT_MENU, self.OnExit, exitItem)
+        self.Bind(wx.EVT_MENU, self.OnAbout, aboutItem)
+
+
+    def OnToggleToolbar(self, event):
+        if self.showToolbarItem.IsChecked():
+            self.toolbar1.Show()
+            self.toolbar2.Show()
+        else:
+            self.toolbar1.Hide()
+            self.toolbar2.Hide()
+
+
+    def OnExit(self, event):
+        self.Close(True)
+
+
+    def OnAbout(self, event):
+        panel = wx.Panel(self, wx.ID_ANY)
+        info = wx.adv.AboutDialogInfo()
+        info.SetName(NAME)
+        info.SetVersion(VERSION)
+        info.SetDescription(wordwrap(DESCRIPTION, 500, wx.ClientDC(panel)))
+        info.SetCopyright(COPYRIGHT)
+        info.SetWebSite(WEBSITE)
+        info.SetLicense(wordwrap(LICENSE, 500, wx.ClientDC(panel)))
+        wx.adv.AboutBox(info)
 
 
 if __name__ == "__main__":
