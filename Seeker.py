@@ -23,6 +23,7 @@ class Seeker(wx.Frame):
         self.notebook = NoteBook(self)
         self.createMenuBar()
         self.createToolAndTab()
+        self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
 
     
     def createToolAndTab(self):
@@ -188,6 +189,10 @@ class Seeker(wx.Frame):
 
     def OnClearSavedComputer(self, event):
         self.notebook.savedComputers.listctrl.DeleteAllItems()
+
+
+    def OnRightDown(self, event):
+        self.PopupMenu(PopupMenu(self), event.GetPosition())
 
 
     def OnToggleToolbar(self, event):
