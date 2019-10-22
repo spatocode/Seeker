@@ -96,6 +96,8 @@ class Seeker(wx.Frame):
 
         self.Bind(wx.EVT_TOOL, self.OnStartCapture, startCaptureTool)
         self.Bind(wx.EVT_TOOL, self.OnStopCapture, stopCaptureTool)
+        self.Bind(wx.EVT_TOOL, self.OnAddComputer, addComputerTool)
+        self.Bind(wx.EVT_TOOL, self.OnStartScan, startScanTool)
 
 
     def createMenuBar(self):
@@ -144,6 +146,49 @@ class Seeker(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnExit, exitItem)
         self.Bind(wx.EVT_MENU, self.OnAbout, aboutItem)
         self.Bind(wx.EVT_MENU, self.OnStartCapture, captureItem)
+        self.Bind(wx.EVT_MENU, self.OnAddComputer, addComputerItem)
+        self.Bind(wx.EVT_MENU, self.OnStartScan, ipScanItem)
+        self.Bind(wx.EVT_MENU, self.OnClearSavedComputer, clearSavedComputerItem)
+        self.Bind(wx.EVT_MENU, self.OnClearLatestIPConn, clearLatestIPItem)
+
+
+    def OnAddComputer(self, event):
+        self.notebook.SetSelection(1)
+        dialog = wx.TextEntryDialog(self, "IP Address", "Add to saved computers", "0.0.0.0")
+        
+        if dialog.ShowModal() == wx.ID_OK:
+            data = ["Dead", "", dialog.GetValue(), "", ""]
+            self.notebook.savedComputers.updateDisplay(data)
+
+        dialog.Destroy()
+
+
+    def OnStartScan(self, event):
+        dialog = wx.TextEntryDialog(self, "Enter IP", "Scan IP", "Example: 190.10.212.1 - 193.164.0.3 OR 127.0.0.1")
+
+        if dialog.ShowModal() == wx.ID_OK:
+            self.toolbar1.EnableTool(3, False)
+            self.toolbar1.EnableTool(4, True)
+            self.notebook.SetSelection(0)
+
+            self.scanthread = Scan(dialog.GetValue())
+
+            self.toolbar1.EnableTool(3, True)
+            self.toolbar1.EnableTool(4, False)
+
+        dialog.Destroy()
+
+
+    def OnStopScan(self, event):
+        if self.scanthread:
+            self.scanthread.stop()
+            self.toolbar1.EnableTool(3, True)
+            self.toolbar1.EnableTool(4, False)
+
+
+    def OnClearSavedComputer(self, event):
+        self.notebook.savedComputers.listctrl.DeleteAllItems()
+
 
     def OnToggleToolbar(self, event):
         if self.showToolbarItem.IsChecked():
