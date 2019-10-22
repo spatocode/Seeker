@@ -4,6 +4,11 @@
 import wx
 import wx.adv
 from wx.lib.wordwrap import wordwrap
+from wx.lib.pubsub import pub
+from sniffer.sniff import SniffThread
+from radmin.scan import Scan
+from interface.popup import PopupMenu
+from interface.tab import NoteBook
 from utils.common import scale_image
 from setup import *
 
@@ -15,6 +20,7 @@ class Seeker(wx.Frame):
 
     def InitUI(self):
         self.Center()
+        self.notebook = NoteBook(self)
         self.createMenuBar()
         self.createToolAndTab()
 
@@ -85,7 +91,11 @@ class Seeker(wx.Frame):
 
         vbox.Add(self.toolbar1, 0, wx.EXPAND)
         vbox.Add(self.toolbar2, 0, wx.EXPAND)
+        vbox.Add(self.notebook, 1, wx.EXPAND)
         self.SetSizer(vbox)
+
+        self.Bind(wx.EVT_TOOL, self.OnStartCapture, startCaptureTool)
+        self.Bind(wx.EVT_TOOL, self.OnStopCapture, stopCaptureTool)
 
 
     def createMenuBar(self):
@@ -133,7 +143,7 @@ class Seeker(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnToggleToolbar, self.showToolbarItem)
         self.Bind(wx.EVT_MENU, self.OnExit, exitItem)
         self.Bind(wx.EVT_MENU, self.OnAbout, aboutItem)
-
+        self.Bind(wx.EVT_MENU, self.OnStartCapture, captureItem)
 
     def OnToggleToolbar(self, event):
         if self.showToolbarItem.IsChecked():
@@ -142,6 +152,21 @@ class Seeker(wx.Frame):
         else:
             self.toolbar1.Hide()
             self.toolbar2.Hide()
+
+    
+    def OnStartCapture(self, event):
+        self.toolbar1.EnableTool(1, False)
+        self.toolbar1.EnableTool(2, True)
+        self.notebook.SetSelection(3)
+        self.sniffthread = SniffThread()
+
+
+    def OnStopCapture(self, event):
+        if self.sniffthread:
+            self.toolbar1.EnableTool(1, True)
+            self.toolbar1.EnableTool(2, False)
+            print("Sniff Stopped")
+            self.sniffthread.stop()
 
 
     def OnExit(self, event):
