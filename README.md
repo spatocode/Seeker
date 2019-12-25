@@ -8,4 +8,4 @@ Seeker is built with wxPython backend.
 
 ## NOTE
 
-This program is still under development. It's still missing some functionalities and you may encounter some bugs. While i'll still work on improving the program overtime, it may not be relied upon for solving heavy networking problems.
+This program is still under development. It's still missing some functionalities and you may encounter some bugs. While i'll still work on improving the program overtime, it may not be relied upon for solving heavy networking problems for the time being.
