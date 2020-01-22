@@ -194,6 +194,9 @@ class Seeker(wx.Frame):
     def OnRightDown(self, event):
         self.PopupMenu(PopupMenu(self), event.GetPosition())
 
+    def OnClearLatestIPConn(self, event):
+        pass
+
 
     def OnToggleToolbar(self, event):
         if self.showToolbarItem.IsChecked():
